@@ -2,7 +2,7 @@ package com.khoavna.asteroidradar.data.datasource.asteroid
 
 import com.khoavna.asteroidradar.data.database.dao.AsteroidDao
 import com.khoavna.asteroidradar.data.database.entity.Asteroid
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 
 class AsteroidDataSourceImpl(private val asteroidDao: AsteroidDao) : AsteroidDataSource {
     override suspend fun insert(asteroid: Asteroid) {
@@ -13,7 +13,7 @@ class AsteroidDataSourceImpl(private val asteroidDao: AsteroidDao) : AsteroidDat
         asteroidDao.insertAll(*asteroids)
     }
 
-    override suspend fun getAsteroids(): StateFlow<List<Asteroid>> {
+    override fun getAsteroids(): Flow<List<Asteroid>> {
         return asteroidDao.getAll()
     }
 

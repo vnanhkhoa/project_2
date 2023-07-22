@@ -4,7 +4,7 @@ import com.khoavna.asteroidradar.data.database.entity.Asteroid
 import com.khoavna.asteroidradar.data.datasource.asteroid.AsteroidDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 class AsteroidRepositoryImpl(
@@ -19,9 +19,7 @@ class AsteroidRepositoryImpl(
         asteroidDataSource.insertAll(*asteroids)
     }
 
-    override suspend fun getAsteroids(): StateFlow<List<Asteroid>> = withContext(dispatcher) {
-        asteroidDataSource.getAsteroids()
-    }
+    override fun getAsteroids(): Flow<List<Asteroid>> = asteroidDataSource.getAsteroids()
 
     override suspend fun update(asteroid: Asteroid) = withContext(dispatcher) {
         asteroidDataSource.update(asteroid)

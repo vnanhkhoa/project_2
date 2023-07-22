@@ -15,11 +15,12 @@ class ApiServiceImpl<T>(private val call: Call<T>): ApiService<T> {
         call.enqueue(object : Callback<T>{
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
-                    with(response.body()) {
-                        if (this != null) it.resume(this)
-                        it.resumeWithException(ExceptionInInitializerError("API Empty"))
+                    response.body()?.also { data ->
+                        return it.resume(data)
                     }
                 }
+
+                it.resumeWithException(Exception("API Empty"))
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
