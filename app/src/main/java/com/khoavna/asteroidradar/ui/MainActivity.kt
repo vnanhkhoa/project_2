@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private val appBarConfig = AppBarConfiguration(
-        setOf(R.id.homeFragment)
+        setOf(R.id.homeFragment, R.id.detailFragment)
     )
 
 

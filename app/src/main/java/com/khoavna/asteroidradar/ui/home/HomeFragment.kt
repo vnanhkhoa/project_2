@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.khoavna.asteroidradar.R
 import com.khoavna.asteroidradar.data.network.wapi.apod.Apod
@@ -22,7 +23,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private val asteroidAdapter = AsteroidAdapter {
-
+        HomeFragmentDirections.actionHomeFragmentToDetailFragment(it).also { action ->
+            findNavController().navigate(action)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
