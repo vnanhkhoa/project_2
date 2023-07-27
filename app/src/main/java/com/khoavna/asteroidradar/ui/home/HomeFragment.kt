@@ -2,8 +2,13 @@ package com.khoavna.asteroidradar.ui.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -28,6 +33,34 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
+    private val menuProvider = object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            menuInflater.inflate(R.menu.menu_home_fragment, menu)
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            when (menuItem.itemId) {
+                R.id.show_all -> {
+                    viewModel.setTypeShow(HomeViewModel.TypeShow.ALL)
+                }
+
+                R.id.today -> {
+                    viewModel.setTypeShow(HomeViewModel.TypeShow.TODAY)
+                }
+
+                R.id.now_to_seven_date -> {
+                    viewModel.setTypeShow(HomeViewModel.TypeShow.WEEK)
+                }
+            }
+
+            return true
+        }
+    }
+
+    private val menuHost: MenuHost by lazy {
+        requireActivity()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -43,6 +76,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        menuHost.addMenuProvider(menuProvider)
 
         binding.apply {
             rcAsteroid.also {
@@ -65,10 +100,20 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
             imageResult.observe(viewLifecycleOwner) { apod ->
                 val header = listOf(AsteroidAdapter.Item.HEADER(apod))
-                val normal = asteroids.value?. map { AsteroidAdapter.Item.NORMAL(it) } ?: emptyList()
+                val normal = asteroids.value?.map { AsteroidAdapter.Item.NORMAL(it) } ?: emptyList()
                 asteroidAdapter.submitList(header + normal)
             }
         }
 
+    }
+
+    override fun onStop() {
+        super.onStop()
+        menuHost.removeMenuProvider(menuProvider)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        menuHost.removeMenuProvider(menuProvider)
     }
 }
