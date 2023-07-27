@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private val appBarConfig = AppBarConfiguration(
-        setOf(R.id.homeFragment, R.id.detailFragment)
+        setOf(R.id.homeFragment)
     )
 
 
@@ -32,5 +32,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         setupActionBarWithNavController(navController, appBarConfig)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 }
